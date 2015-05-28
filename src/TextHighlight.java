@@ -3,13 +3,13 @@ import java.util.Iterator;
 
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-public class Highlight
+public class TextHighlight
 	{
 		protected HashSet<Integer> locations;
 		protected final String text;
 		protected DefaultHighlightPainter color;
 
-		public Highlight(String text, DefaultHighlightPainter color)
+		public TextHighlight(String text, DefaultHighlightPainter color)
 			{
 				this.text = text;
 				locations = new HashSet<Integer>();

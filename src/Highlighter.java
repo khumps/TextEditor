@@ -7,14 +7,14 @@ import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 public class Highlighter
 	{
-		protected HashSet<Highlight> locations;
+		protected HashSet<TextHighlight> locations;
 		protected final String text;
 		protected DefaultHighlightPainter color;
 
 		public Highlighter(String text, DefaultHighlighter highlighter, DefaultHighlightPainter color)
 			{
 				this.text = text;
-				locations = new HashSet<Highlight>();
+				locations = new HashSet<TextHighlight>();
 				this.color = color;
 			}
 
@@ -24,14 +24,14 @@ public class Highlighter
 			while (toSearch.indexOf(text, i) != -1)
 				{
 					i = toSearch.indexOf(text, i);
-					locations.add(new Highlight(toSearch.indexOf(text, i)));
+					locations.add(new TextHighlight(toSearch.indexOf(text, i)));
 					i++;
 				}
 			System.out.println(locations);
 		}
 
 		public void removeHighlights(String toSearch) {
-			Iterator<Highlight> iterator = locations.iterator();
+			Iterator<TextHighlight> iterator = locations.iterator();
 			while (iterator.hasNext())
 				{
 					Integer spot = iterator.next().locaton;

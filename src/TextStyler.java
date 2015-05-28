@@ -9,7 +9,7 @@ import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 public class TextStyler
 	{
 		private JEditorPane pane;
-		private HashSet<Highlight> highlights;
+		private HashSet<TextHighlight> highlights;
 		private Highlighter highlighter;
 
 		public TextStyler(JEditorPane pane)
@@ -18,7 +18,7 @@ public class TextStyler
 				this.highlighter = pane.getHighlighter();
 			}
 
-		public TextStyler(JEditorPane pane, HashSet<Highlight> highlights)
+		public TextStyler(JEditorPane pane, HashSet<TextHighlight> highlights)
 			{
 				this.pane = pane;
 				this.highlights = highlights;
@@ -26,7 +26,7 @@ public class TextStyler
 
 		public void drawHighlight() {
 
-			for (Highlight h : highlights)
+			for (TextHighlight h : highlights)
 				{
 					int length = h.text.length() - 1;
 					for (Integer i : h.locations)
@@ -43,6 +43,6 @@ public class TextStyler
 		}
 
 		public void newHighlight(String text, Color color) {
-			highlights.add(new Highlight(pane.getText(), text, new DefaultHighlightPainter(color)));
+			highlights.add(new TextHighlight(pane.getText(), text, new DefaultHighlightPainter(color)));
 		}
 	}
