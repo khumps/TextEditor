@@ -7,25 +7,23 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JTextPane;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
-public class Editor extends JEditorPane
+public class Editor extends JTextPane
     {
 	private Listener listener = new Listener(this);
 	private JFileChooser fileChooser;
 	private JMenuBar menu = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
-	private JMenu editMenu = new JMenu("Edit");
-	private DefaultStyledDocument doc = new DefaultStyledDocument();
-	protected CodeStyle style = new CodeStyle(this);
+	protected CodeStyler style = new CodeStyler(this);
 	JFrame frame = new JFrame();
 	private Timer timer = new Timer(30, listener);
 	private File lastFile = null;
@@ -34,6 +32,7 @@ public class Editor extends JEditorPane
 	    {
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
+		setSelectionColor(Color.BLUE);
 		timer.setActionCommand("timer");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
@@ -50,7 +49,6 @@ public class Editor extends JEditorPane
 	    {
 		frame.setJMenuBar(menu);
 		initFileMenu();
-		// initEditMenu();
 	    }
 
 	private void initFileMenu()

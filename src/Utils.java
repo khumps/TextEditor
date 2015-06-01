@@ -30,16 +30,4 @@ public class Utils
 		button.setPreferredSize(size);
 		return button;
 	    }
-
-	public static JTextArea newArea(String text)
-	    {
-		JTextArea area = new JTextArea(text);
-		area.setEditable(false);
-		area.setCursor(null);
-		area.setOpaque(false);
-		area.setFocusable(false);
-		area.setLineWrap(true);
-		area.setWrapStyleWord(true);
-		return area;
-	    }
     }
