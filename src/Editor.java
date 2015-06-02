@@ -17,8 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
-public class Editor extends JTextPane
-    {
+public class Editor extends JTextPane {
 	private Listener listener = new Listener(this);
 	private JFileChooser fileChooser;
 	private JMenuBar menu = new JMenuBar();
@@ -28,8 +27,7 @@ public class Editor extends JTextPane
 	private Timer timer = new Timer(30, listener);
 	private File lastFile = null;
 
-	public Editor()
-	    {
+	public Editor() {
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
 		setSelectionColor(Color.BLUE);
@@ -43,98 +41,88 @@ public class Editor extends JTextPane
 		frame.pack();
 		frame.setVisible(true);
 		timer.start();
-	    }
+	}
 
-	private void initMenuBar()
-	    {
+	private void initMenuBar() {
 		frame.setJMenuBar(menu);
 		initFileMenu();
-	    }
+	}
 
-	private void initFileMenu()
-	    {
+	private void initFileMenu() {
 		menu.add(fileMenu);
 		Utils.newMenuItem(Utils.button, "New", "newFile", listener, fileMenu);
 		Utils.newMenuItem(Utils.button, "Open", "openFile", listener, fileMenu);
 		Utils.newMenuItem(Utils.button, "Save", "saveFile", listener, fileMenu);
-	    }
+	}
 
-	protected void initFileChooser()
-	    {
+	protected void initFileChooser() {
+		String[] types = { "java" };
 		fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Java Files", "java"));
-	    }
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Java Files",
+				types));
+	}
 
-	protected void openFileChooser()
-	    {
+	protected void openFileChooser() {
 		if (lastFile != null)
-		    fileChooser = new JFileChooser(lastFile);
+			fileChooser = new JFileChooser(lastFile);
 		fileChooser.showOpenDialog(this);
 		String doc = "";
 		String toAdd = null;
-		try
-		    {
+		try {
 			lastFile = fileChooser.getSelectedFile();
-			if (lastFile != null)
-			    {
+			if (lastFile != null) {
 				FileReader reader = new FileReader(lastFile);
 				BufferedReader bReader = new BufferedReader(reader);
 				while ((toAdd = bReader.readLine()) != null)
-				    doc += toAdd;
+					doc += toAdd;
 				setText(doc);
 				bReader.close();
-			    }
-		    } catch (IOException e)
-		    {
-		    }
+			}
+		} catch (IOException e) {
+		}
 
-	    }
+	}
 
-	protected void saveFileChooser()
-	    {
+	protected void saveFileChooser() {
 		if (lastFile != null)
-		    fileChooser = new JFileChooser(lastFile);
+			fileChooser = new JFileChooser(lastFile);
 		fileChooser.showSaveDialog(this);
-		try
-		    {
+		try {
 			lastFile = fileChooser.getSelectedFile();
-			if (lastFile != null)
-			    {
+			if (lastFile != null) {
 				FileWriter writer = new FileWriter(lastFile);
-				writer.write(getDocument().getText(0, getDocument().getLength()));
+				writer.write(getDocument()
+						.getText(0, getDocument().getLength()));
 				writer.close();
-			    }
-		    } catch (IOException | BadLocationException e)
-		    {
-		    }
-	    }
+			}
+		} catch (IOException | BadLocationException e) {
+		}
+	}
 
-	public void createHighlights()
-	    {
+	public void createHighlights() {
 		addTextHighlights();
 		addBraceHighlights();
-	    }
+	}
 
-	public void addTextHighlights()
-	    {
-		style.addHighlight(Color.ORANGE, "abstract", "assert", "boolean", "break", "byte",
-			"case", "catch", "char", "class", "continue", "default", "do", "double",
-			"else", "enum", "extends", "final", "finally", "float", "for", "if",
-			"implements", "import", "instanceof", "int", "interface", "long", "native",
-			"new", "package", "private", "protected", "public", "return", "short",
-			"static", "strictfp", "super", "switch", "synchronized", "this", "throw",
-			"throws", "transient", "try", "void", "volatile", "while"); // keywords
-	    }
+	public void addTextHighlights() {
+		style.addHighlight(Color.ORANGE, "abstract", "assert", "boolean",
+				"break", "byte", "case", "catch", "char", "class", "continue",
+				"default", "do", "double", "else", "enum", "extends", "final",
+				"finally", "float", "for", "if", "implements", "import",
+				"instanceof", "int", "interface", "long", "native", "new",
+				"package", "private", "protected", "public", "return", "short",
+				"static", "strictfp", "super", "switch", "synchronized",
+				"this", "throw", "throws", "transient", "try", "void",
+				"volatile", "while"); // keywords
+	}
 
-	public void addBraceHighlights()
-	    {
+	public void addBraceHighlights() {
 		style.addBraceHighlight('{', '}', Color.GREEN);
 		style.addBraceHighlight('(', ')', Color.GREEN);
 		style.addBraceHighlight('[', ']', Color.GREEN);
-	    }
+	}
 
-	public static void main(String[] args)
-	    {
+	public static void main(String[] args) {
 		new Editor();
-	    }
-    }
+	}
+}
