@@ -30,7 +30,7 @@ public class Editor extends JTextPane {
 	public Editor() {
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
-		setSelectionColor(Color.BLUE);
+		// setSelectionColor(Color.BLUE);
 		timer.setActionCommand("timer");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
