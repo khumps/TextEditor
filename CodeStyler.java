@@ -11,6 +11,7 @@ import javax.swing.text.Highlighter;
 public class CodeStyler {
 	private HashSet<TextHighlighter> textHighlights;
 	private Highlighter highlighter;
+	private SelectionHighlighter selection;
 
 	public HashSet<Character> getCharHighlights() {
 		return charHighlights;
@@ -26,6 +27,7 @@ public class CodeStyler {
 		this.braceHighlights = new HashSet<BraceHighlighter>();
 		this.charHighlights = new HashSet<Character>();
 		this.highlighter = pane.getHighlighter();
+		selection = new SelectionHighlighter("", Color.YELLOW);
 	}
 
 	public CodeStyler(JTextPane pane, HashSet<TextHighlighter> highlights) {
@@ -34,42 +36,55 @@ public class CodeStyler {
 	}
 
 	public void drawTextHighlights() {
-		highlighter.removeAllHighlights(); //FIX
+		highlighter.removeAllHighlights(); // FIX
 		for (TextHighlighter h : textHighlights) {
-			Iterator<Object> iterator = h.removedHighlights.iterator();
-			/* Removes the highlights that should no longer be there */
-			while (iterator.hasNext()) {
-				Object hi = iterator.next();
-				highlighter.removeHighlight(hi);
-				iterator.remove();
-			}
+			/*
+			 * Iterator<Object> iterator = h.removedHighlights.iterator();
+			 * Removes the highlights that should no longer be there while
+			 * (iterator.hasNext()) { Object hi = iterator.next();
+			 * highlighter.removeHighlight(hi); iterator.remove(); }
+			 */
 			int length = h.text.length();
 			/* Adds new highlights */
 			for (Integer i : h.locations.keySet()) {
 				try {
-					h.locations.put(i,
-							highlighter.addHighlight(i, i + length, h.color));
+					highlighter.addHighlight(i, i + length, h.color);
 				} catch (BadLocationException e) {
 				}
+			}
+		}
+		for (Integer i : selection.locations.keySet()) {
+			int length = selection.text.length();
+			try {
+				highlighter.addHighlight(i, length, selection.color);
+			} catch (BadLocationException e) {
 			}
 		}
 	}
 
 	public void updateHighlights() {
-		for (TextHighlighter h : textHighlights) {
-			try {
-				h.updateHighlights(pane.getDocument().getText(0,
-						pane.getDocument().getLength()));
-			} catch (BadLocationException e) {
+		try {
+			String text = pane.getDocument().getText(0,
+					pane.getDocument().getLength());
+			for (TextHighlighter h : textHighlights) {
+				h.updateHighlights(text);
+
 			}
-			;
+			String selected = "";
+			if (pane.getSelectedText() != null) {
+				selected = pane.getSelectedText();
+				System.out.println("ran");
+				System.out.println(selected);
+				selection.setText(selected);
+				selection.updateHighlights(text);
+			}
+		} catch (BadLocationException e) {
 		}
 	}
 
 	public void addHighlight(Color color, String... text) {
 		for (String s : text)
-			textHighlights.add(new TextHighlighter(s,
-					new DefaultHighlightPainter(color)));
+			textHighlights.add(new TextHighlighter(s, color));
 	}
 
 	public void addBraceHighlight(char open, char close, Color color) {

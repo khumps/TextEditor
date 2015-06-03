@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,9 +12,9 @@ public class TextHighlighter {
 	protected String text;
 	protected DefaultHighlightPainter color;
 
-	public TextHighlighter(String text, DefaultHighlightPainter color) {
+	public TextHighlighter(String text, Color color) {
 		this.text = text;
-		this.color = color;
+		this.color = new DefaultHighlightPainter(color);
 	}
 
 	public void findHighlights(String toSearch) {
@@ -42,14 +43,11 @@ public class TextHighlighter {
 							.charAt(i + text.length())))) {
 				removedHighlights.add(locations.get(i));
 				iterator.remove();
-				System.out.println("removed");
 			} else if (toSearch.indexOf(text, i) != i) {
 				removedHighlights.add(locations.get(i));
-				System.out.println("removed");
 				iterator.remove();
 			}
 		}
-		System.out.println(removedHighlights);
 	}
 
 	public void updateHighlights(String text) {
