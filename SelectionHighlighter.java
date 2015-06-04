@@ -12,6 +12,7 @@ public class SelectionHighlighter extends TextHighlighter {
 		int i = 0;
 		while (toSearch.indexOf(text, i) != -1) {
 			i = toSearch.indexOf(text, i);
+			locations.put(i, null);
 			i += text.length();
 		}
 	}
@@ -25,6 +26,11 @@ public class SelectionHighlighter extends TextHighlighter {
 				iterator.remove();
 			}
 		}
+	}
+
+	public void setText(String text) {
+		locations.clear();
+		this.text = text;
 	}
 
 }

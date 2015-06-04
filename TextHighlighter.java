@@ -64,6 +64,7 @@ public class TextHighlighter {
 	}
 
 	public void setText(String text) {
+		locations.clear();
 		this.text = text;
 	}
 }

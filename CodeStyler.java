@@ -37,6 +37,15 @@ public class CodeStyler {
 
 	public void drawTextHighlights() {
 		highlighter.removeAllHighlights(); // FIX
+		int length = selection.text.length();
+		for (Integer i : selection.locations.keySet()) {
+			try {
+				// System.out.println("ran");
+				highlighter.addHighlight(i, i + length, selection.color);
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+		}
 		for (TextHighlighter h : textHighlights) {
 			/*
 			 * Iterator<Object> iterator = h.removedHighlights.iterator();
@@ -44,20 +53,13 @@ public class CodeStyler {
 			 * (iterator.hasNext()) { Object hi = iterator.next();
 			 * highlighter.removeHighlight(hi); iterator.remove(); }
 			 */
-			int length = h.text.length();
+			length = h.text.length();
 			/* Adds new highlights */
 			for (Integer i : h.locations.keySet()) {
 				try {
 					highlighter.addHighlight(i, i + length, h.color);
 				} catch (BadLocationException e) {
 				}
-			}
-		}
-		for (Integer i : selection.locations.keySet()) {
-			int length = selection.text.length();
-			try {
-				highlighter.addHighlight(i, length, selection.color);
-			} catch (BadLocationException e) {
 			}
 		}
 	}
@@ -71,10 +73,11 @@ public class CodeStyler {
 
 			}
 			String selected = "";
+			selection.setText(selected);
 			if (pane.getSelectedText() != null) {
 				selected = pane.getSelectedText();
-				System.out.println("ran");
-				System.out.println(selected);
+				// System.out.println("ran");
+				// System.out.println(selected);
 				selection.setText(selected);
 				selection.updateHighlights(text);
 			}
