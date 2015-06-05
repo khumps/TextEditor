@@ -7,8 +7,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 public class TextHighlighter {
-	protected HashSet<Object> removedHighlights = new HashSet<Object>();
-	protected HashMap<Integer, Object> locations = new HashMap<Integer, Object>();
+	protected HashSet<Integer> locations = new HashSet<Integer>();
 	protected String text;
 	protected DefaultHighlightPainter color;
 
@@ -27,24 +26,22 @@ public class TextHighlighter {
 					&& (!validIndex(toSearch, i + text.length()) || (validIndex(
 							toSearch, i + text.length()) && isValidChar(toSearch
 							.charAt(i + text.length())))))
-				locations.put(new Integer(i), null);
+				locations.add(i);
 
 			i += text.length();
 		}
 	}
 
 	public void removeHighlights(String toSearch) {
-		Iterator<Integer> iterator = locations.keySet().iterator();
+		Iterator<Integer> iterator = locations.iterator();
 		while (iterator.hasNext()) {
 			Integer i = iterator.next();
 			if ((validIndex(toSearch, i - 1) && !isValidChar(toSearch
 					.charAt(i - 1)))
 					|| (validIndex(toSearch, i + text.length()) && !isValidChar(toSearch
 							.charAt(i + text.length())))) {
-				removedHighlights.add(locations.get(i));
 				iterator.remove();
 			} else if (toSearch.indexOf(text, i) != i) {
-				removedHighlights.add(locations.get(i));
 				iterator.remove();
 			}
 		}

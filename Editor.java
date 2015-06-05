@@ -34,6 +34,7 @@ public class Editor extends JTextPane {
 		timer.setActionCommand("timer");
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
+		addMouseListener(listener);
 		frame.add(this);
 		initMenuBar();
 		initFileChooser();

@@ -13,6 +13,10 @@ public class CodeStyler {
 	private Highlighter highlighter;
 	private SelectionHighlighter selection;
 
+	public SelectionHighlighter getSelection() {
+		return selection;
+	}
+
 	public HashSet<Character> getCharHighlights() {
 		return charHighlights;
 	}
@@ -27,7 +31,7 @@ public class CodeStyler {
 		this.braceHighlights = new HashSet<BraceHighlighter>();
 		this.charHighlights = new HashSet<Character>();
 		this.highlighter = pane.getHighlighter();
-		selection = new SelectionHighlighter("", Color.YELLOW);
+		selection = new SelectionHighlighter("", Color.YELLOW, Color.LIGHT_GRAY);
 	}
 
 	public CodeStyler(JTextPane pane, HashSet<TextHighlighter> highlights) {
@@ -38,10 +42,14 @@ public class CodeStyler {
 	public void drawTextHighlights() {
 		highlighter.removeAllHighlights(); // FIX
 		int length = selection.text.length();
-		for (Integer i : selection.locations.keySet()) {
+		for (Integer i : selection.locations) {
 			try {
 				// System.out.println("ran");
-				highlighter.addHighlight(i, i + length, selection.color);
+				if (i == selection.initialSelection)
+					highlighter.addHighlight(i, i + length,
+							selection.initHighlighter);
+				else
+					highlighter.addHighlight(i, i + length, selection.color);
 			} catch (BadLocationException e) {
 				e.printStackTrace();
 			}
@@ -55,7 +63,7 @@ public class CodeStyler {
 			 */
 			length = h.text.length();
 			/* Adds new highlights */
-			for (Integer i : h.locations.keySet()) {
+			for (Integer i : h.locations) {
 				try {
 					highlighter.addHighlight(i, i + length, h.color);
 				} catch (BadLocationException e) {
@@ -72,14 +80,17 @@ public class CodeStyler {
 				h.updateHighlights(text);
 
 			}
-			String selected = "";
-			selection.setText(selected);
-			if (pane.getSelectedText() != null) {
-				selected = pane.getSelectedText();
-				// System.out.println("ran");
-				// System.out.println(selected);
+			if (!selection.refactoring) {
+				String selected = "";
 				selection.setText(selected);
-				selection.updateHighlights(text);
+				if (pane.getSelectedText() != null) {
+					selected = pane.getSelectedText();
+					// System.out.println("ran");
+					// System.out.println(selected);
+					selection.setInit(pane.getCaretPosition());
+					selection.setText(selected);
+					selection.updateHighlights(text);
+				}
 			}
 		} catch (BadLocationException e) {
 		}
