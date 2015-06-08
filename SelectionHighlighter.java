@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.util.Iterator;
 
+import javax.swing.JEditorPane;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 public class SelectionHighlighter extends TextHighlighter {
@@ -43,9 +44,9 @@ public class SelectionHighlighter extends TextHighlighter {
 		initialSelection = i;
 	}
 
-	public void refactor(String refactorTo, String toSearch) {
-		for (Integer i : locations) {
-			toSearch.replaceAll(text, refactorTo);
-		}
+	public void refactor(String old, String refactorTo, String toSearch,
+			JEditorPane pane) {
+		pane.setText(toSearch.replaceAll(old, refactorTo));
+		System.out.println("ran");
 	}
 }

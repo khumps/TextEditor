@@ -9,12 +9,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.undo.UndoManager;
 
 public class Listener extends MouseAdapter implements ActionListener,
 		KeyListener {
 	protected Editor editor;
 	private JOptionPane refactor = new JOptionPane();
 	private String refactorTo;
+	protected UndoHandler undoHandler = new UndoHandler();
+	protected UndoManager undoManager = new UndoManager();
 
 	public Listener(Editor editor) {
 		this.editor = editor;
@@ -54,10 +57,21 @@ public class Listener extends MouseAdapter implements ActionListener,
 
 	public void mousePressed(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {
-			refactor.showInputDialog("Refactor to: ");
+			String temp = editor.style.getSelection().text;
+			String temp2 = "";
+			try {
+				temp2 = editor.getDocument().getText(0,
+						editor.getDocument().getLength());
+			} catch (BadLocationException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			// editor.style.getSelection().refactoring = true;
-			editor.style.getSelection().refactor(
-					editor.style.getSelection().text, refactorTo);
+			editor.style.getSelection()
+					.refactor(temp,
+							JOptionPane.showInputDialog("Refactor to: "),
+							temp2, editor);
+
 		}
 	}
 
