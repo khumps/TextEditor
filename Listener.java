@@ -16,7 +16,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 	protected Editor editor;
 	private JOptionPane refactor = new JOptionPane();
 	private String refactorTo;
-	protected UndoHandler undoHandler = new UndoHandler();
+	// protected UndoHandler undoHandler = new UndoHandler();
 	protected UndoManager undoManager = new UndoManager();
 
 	public Listener(Editor editor) {
@@ -29,8 +29,8 @@ public class Listener extends MouseAdapter implements ActionListener,
 
 		if (command.equals("timer")) {
 			braceHighlights();
-			editor.style.updateHighlights();
-			editor.style.drawTextHighlights();
+			editor.currentPane.style.updateHighlights();
+			editor.currentPane.style.drawTextHighlights();
 		}
 
 		if (command.equals("openFile"))
@@ -42,35 +42,35 @@ public class Listener extends MouseAdapter implements ActionListener,
 
 	private void braceHighlights() {
 		char c = '\0';
-		Document d = editor.getDocument();
+		Document d = editor.currentPane.getDocument();
 		try {
-			if (editor.getCaretPosition() < d.getLength()
-					&& editor.getCaretPosition() > 0)
-				c = d.getText(0, editor.getDocument().getLength()).charAt(
-						editor.getCaretPosition());
+			if (editor.currentPane.getCaretPosition() < d.getLength()
+					&& editor.currentPane.getCaretPosition() > 0)
+				c = d.getText(0, editor.currentPane.getDocument().getLength())
+						.charAt(editor.currentPane.getCaretPosition());
 		} catch (BadLocationException e1) {
 		}
-		if (editor.style.getCharHighlights().contains(c)) {
-			editor.style.drawBraceHighlights(editor.getCaretPosition(), c);
+		if (editor.currentPane.style.getCharHighlights().contains(c)) {
+			editor.currentPane.style.drawBraceHighlights(
+					editor.currentPane.getCaretPosition(), c);
 		}
 	}
 
 	public void mousePressed(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {
-			String temp = editor.style.getSelection().text;
+			String temp = editor.currentPane.style.getSelection().text;
 			String temp2 = "";
 			try {
-				temp2 = editor.getDocument().getText(0,
-						editor.getDocument().getLength());
+				temp2 = editor.currentPane.getDocument().getText(0,
+						editor.currentPane.getDocument().getLength());
 			} catch (BadLocationException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			// editor.style.getSelection().refactoring = true;
-			editor.style.getSelection()
-					.refactor(temp,
-							JOptionPane.showInputDialog("Refactor to: "),
-							temp2, editor);
+			editor.currentPane.style.getSelection().refactor(temp,
+					JOptionPane.showInputDialog("Refactor to: "), temp2,
+					editor.currentPane);
 
 		}
 	}
@@ -78,7 +78,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER)
-			editor.style.getSelection().refactoring = false;
+			editor.currentPane.style.getSelection().refactoring = false;
 
 	}
 

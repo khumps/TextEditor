@@ -17,87 +17,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
-public class Editor extends JTextPane {
-	private Listener listener = new Listener(this);
-	private JFileChooser fileChooser;
-	private JMenuBar menu = new JMenuBar();
-	private JMenu fileMenu = new JMenu("File");
-	protected CodeStyler style = new CodeStyler(this);
-	JFrame frame = new JFrame();
-	private Timer timer = new Timer(30, listener);
-	private File lastFile = null;
+public class EditorPane extends JTextPane {
 
-	public Editor() {
+	protected CodeStyler style = new CodeStyler(this);
+	private Timer timer;
+	private File lastFile = null;
+	protected String name;
+
+	public EditorPane(Listener listener, String text, String name) {
+		this.name = name;
+		timer = new Timer(30, listener);
+		setText(text);
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
 		// setSelectionColor(Color.BLUE);
 		timer.setActionCommand("timer");
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
 		addMouseListener(listener);
-		frame.add(this);
-		initMenuBar();
-		initFileChooser();
 		createHighlights();
-		frame.pack();
-		frame.setVisible(true);
 		timer.start();
-	}
-
-	private void initMenuBar() {
-		frame.setJMenuBar(menu);
-		initFileMenu();
-	}
-
-	private void initFileMenu() {
-		menu.add(fileMenu);
-		Utils.newMenuItem(Utils.button, "New", "newFile", listener, fileMenu);
-		Utils.newMenuItem(Utils.button, "Open", "openFile", listener, fileMenu);
-		Utils.newMenuItem(Utils.button, "Save", "saveFile", listener, fileMenu);
-	}
-
-	protected void initFileChooser() {
-		String[] types = { "java" };
-		fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Java Files",
-				types));
-	}
-
-	protected void openFileChooser() {
-		if (lastFile != null)
-			fileChooser = new JFileChooser(lastFile);
-		fileChooser.showOpenDialog(this);
-		String doc = "";
-		String toAdd = null;
-		try {
-			lastFile = fileChooser.getSelectedFile();
-			if (lastFile != null) {
-				FileReader reader = new FileReader(lastFile);
-				BufferedReader bReader = new BufferedReader(reader);
-				while ((toAdd = bReader.readLine()) != null)
-					doc += toAdd;
-				setText(doc);
-				bReader.close();
-			}
-		} catch (IOException e) {
-		}
-
-	}
-
-	protected void saveFileChooser() {
-		if (lastFile != null)
-			fileChooser = new JFileChooser(lastFile);
-		fileChooser.showSaveDialog(this);
-		try {
-			lastFile = fileChooser.getSelectedFile();
-			if (lastFile != null) {
-				FileWriter writer = new FileWriter(lastFile);
-				writer.write(getDocument()
-						.getText(0, getDocument().getLength()));
-				writer.close();
-			}
-		} catch (IOException | BadLocationException e) {
-		}
 	}
 
 	public void createHighlights() {
@@ -121,9 +58,5 @@ public class Editor extends JTextPane {
 		style.addBraceHighlight('{', '}', Color.GREEN);
 		style.addBraceHighlight('(', ')', Color.GREEN);
 		style.addBraceHighlight('[', ']', Color.GREEN);
-	}
-
-	public static void main(String[] args) {
-		new Editor();
 	}
 }
