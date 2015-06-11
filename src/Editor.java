@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 
 public class Editor extends JFrame {
-	private JTabbedPane tabs = new JTabbedPane();
+	protected JTabbedPane tabs = new JTabbedPane();
 	private JFileChooser fileChooser;
 	private JMenuBar menu = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
@@ -45,7 +45,7 @@ public class Editor extends JFrame {
 		initMenuBar();
 		initFileChooser();
 		add(tabs);
-		setDefaultSize(100);
+		//setDefaultSize(100);
 		pack();
 		setVisible(true);
 		timer.start();
@@ -74,6 +74,8 @@ public class Editor extends JFrame {
 		Utils.newMenuItem(Utils.button, "New", "newFile", listener, fileMenu);
 		Utils.newMenuItem(Utils.button, "Open", "openFile", listener, fileMenu);
 		Utils.newMenuItem(Utils.button, "Save", "saveFile", listener, fileMenu);
+		Utils.newMenuItem(Utils.button, "Close Tab", "closeTab", listener,
+				fileMenu);
 	}
 
 	protected void initFileChooser() {

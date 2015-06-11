@@ -14,8 +14,6 @@ import javax.swing.undo.UndoManager;
 public class Listener extends MouseAdapter implements ActionListener,
 		KeyListener {
 	protected Editor editor;
-	private JOptionPane refactor = new JOptionPane();
-	private String refactorTo;
 	// protected UndoHandler undoHandler = new UndoHandler();
 	protected UndoManager undoManager = new UndoManager();
 
@@ -37,7 +35,12 @@ public class Listener extends MouseAdapter implements ActionListener,
 			editor.openFileChooser();
 		if (command.equals("saveFile"))
 			editor.saveFileChooser();
-
+		if (command.equals("closeTab")) {
+			editor.tabs.remove(editor.currentPane);
+			editor.currentPane = (EditorPane) editor.tabs
+					.getComponentAt(editor.tabs.getTabCount() - 1);
+			editor.tabs.setSelectedIndex(editor.tabs.getTabCount() - 1);
+		}
 	}
 
 	private void braceHighlights() {
