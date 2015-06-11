@@ -12,15 +12,6 @@ public class CodeStyler {
 	private HashSet<TextHighlighter> textHighlights;
 	private Highlighter highlighter;
 	private SelectionHighlighter selection;
-
-	public SelectionHighlighter getSelection() {
-		return selection;
-	}
-
-	public HashSet<Character> getCharHighlights() {
-		return charHighlights;
-	}
-
 	private HashSet<BraceHighlighter> braceHighlights;
 	private HashSet<Character> charHighlights;
 	private JTextPane pane;
@@ -34,9 +25,12 @@ public class CodeStyler {
 		selection = new SelectionHighlighter("", Color.YELLOW, Color.LIGHT_GRAY);
 	}
 
-	public CodeStyler(JTextPane pane, HashSet<TextHighlighter> highlights) {
-		this.pane = pane;
-		this.textHighlights = highlights;
+	public SelectionHighlighter getSelection() {
+		return selection;
+	}
+
+	public HashSet<Character> getCharHighlights() {
+		return charHighlights;
 	}
 
 	public void drawTextHighlights() {
