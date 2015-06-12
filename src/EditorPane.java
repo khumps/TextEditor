@@ -26,8 +26,10 @@ public class EditorPane extends JTextPane {
 
 	public EditorPane(Listener listener, String text, String name) {
 		this.name = name;
+		setContentType("text/html");
 		timer = new Timer(30, listener);
 		setText(text);
+		setText("<html><b>text</b></html>");
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
 		// setSelectionColor(Color.BLUE);
