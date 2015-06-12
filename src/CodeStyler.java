@@ -9,12 +9,12 @@ import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter;
 
 public class CodeStyler {
-	private HashSet<TextHighlighter> textHighlights;
+	protected HashSet<TextHighlighter> textHighlights;
 	private Highlighter highlighter;
-	private SelectionHighlighter selection;
+	protected SelectionHighlighter selection;
 	private HashSet<BraceHighlighter> braceHighlights;
 	private HashSet<Character> charHighlights;
-	private JTextPane pane;
+	protected JTextPane pane;
 
 	public CodeStyler(JTextPane pane) {
 		this.pane = pane;
@@ -38,7 +38,6 @@ public class CodeStyler {
 		int length = selection.text.length();
 		for (Integer i : selection.locations) {
 			try {
-				// System.out.println("ran");
 				if (i == selection.initialSelection)
 					highlighter.addHighlight(i, i + length,
 							selection.initHighlighter);
@@ -106,15 +105,18 @@ public class CodeStyler {
 		for (BraceHighlighter b : braceHighlights) {
 			if (b.open == c)
 				try {
-					highlighter.addHighlight(location, b.findClose(
-							pane.getDocument().getText(0,
-									pane.getDocument().getLength()), location),
-							b.color);
+					String text = pane.getDocument().getText(0,
+							pane.getDocument().getLength());
+					int temp = b.findClose(text, location);
+					if (Utils.validIndex(text, temp))
+						highlighter.addHighlight(location, temp, b.color);
 					if (b.close == c)
-						highlighter.addHighlight(b.findOpen(pane.getDocument()
-								.getText(0, pane.getDocument().getLength()),
-								location), location, b.color);
+						highlighter.addHighlight(location, location, b.color);
+					highlighter.addHighlight(b.findOpen(pane.getDocument()
+							.getText(0, pane.getDocument().getLength()),
+							location), location, b.color);
 				} catch (BadLocationException e) {
+					e.printStackTrace();
 				}
 		}
 	}

@@ -21,10 +21,10 @@ public class TextHighlighter {
 		while (toSearch.indexOf(text, i) != -1) {
 			i = toSearch.indexOf(text, i);
 
-			if ((!validIndex(toSearch, i - 1) || (validIndex(toSearch, i - 1) && isValidChar(toSearch
-					.charAt(i - 1))))
-					&& (!validIndex(toSearch, i + text.length()) || (validIndex(
-							toSearch, i + text.length()) && isValidChar(toSearch
+			if ((!Utils.validIndex(toSearch, i - 1) || (Utils.validIndex(
+					toSearch, i - 1) && isValidChar(toSearch.charAt(i - 1))))
+					&& (!Utils.validIndex(toSearch, i + text.length()) || (Utils
+							.validIndex(toSearch, i + text.length()) && isValidChar(toSearch
 							.charAt(i + text.length())))))
 				locations.add(i);
 
@@ -36,9 +36,9 @@ public class TextHighlighter {
 		Iterator<Integer> iterator = locations.iterator();
 		while (iterator.hasNext()) {
 			Integer i = iterator.next();
-			if ((validIndex(toSearch, i - 1) && !isValidChar(toSearch
+			if ((Utils.validIndex(toSearch, i - 1) && !isValidChar(toSearch
 					.charAt(i - 1)))
-					|| (validIndex(toSearch, i + text.length()) && !isValidChar(toSearch
+					|| (Utils.validIndex(toSearch, i + text.length()) && !isValidChar(toSearch
 							.charAt(i + text.length())))) {
 				iterator.remove();
 			} else if (toSearch.indexOf(text, i) != i) {
@@ -54,10 +54,6 @@ public class TextHighlighter {
 
 	public boolean isValidChar(char c) {
 		return (Character.isWhitespace(c) || c == '(' || c == ')' || c == '{' || c == '}');
-	}
-
-	public boolean validIndex(String s, int i) {
-		return i >= 0 && i < s.length();
 	}
 
 	public void setText(String text) {

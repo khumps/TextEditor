@@ -17,8 +17,10 @@ public class SelectionHighlighter extends TextHighlighter {
 	}
 
 	public void findHighlights(String toSearch) {
+		boolean first = true;
 		int i = 0;
 		while (toSearch.indexOf(text, i) != -1) {
+
 			i = toSearch.indexOf(text, i);
 			locations.add(i);
 			i += text.length();

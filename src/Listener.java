@@ -26,7 +26,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 		String command = e.getActionCommand();
 
 		if (command.equals("timer")) {
-			braceHighlights();
+			// braceHighlights();
 			editor.currentPane.style.updateHighlights();
 			editor.currentPane.style.drawTextHighlights();
 		}
@@ -51,6 +51,8 @@ public class Listener extends MouseAdapter implements ActionListener,
 					&& editor.currentPane.getCaretPosition() > 0)
 				c = d.getText(0, editor.currentPane.getDocument().getLength())
 						.charAt(editor.currentPane.getCaretPosition());
+			System.out.println(c);
+
 		} catch (BadLocationException e1) {
 		}
 		if (editor.currentPane.style.getCharHighlights().contains(c)) {
@@ -67,10 +69,8 @@ public class Listener extends MouseAdapter implements ActionListener,
 				temp2 = editor.currentPane.getDocument().getText(0,
 						editor.currentPane.getDocument().getLength());
 			} catch (BadLocationException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			// editor.style.getSelection().refactoring = true;
 			editor.currentPane.style.getSelection().refactor(temp,
 					JOptionPane.showInputDialog("Refactor to: "), temp2,
 					editor.currentPane);
