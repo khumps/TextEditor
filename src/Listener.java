@@ -28,7 +28,6 @@ public class Listener extends MouseAdapter implements ActionListener,
 		if (command.equals("timer")) {
 			// braceHighlights();
 			editor.currentPane.style.updateHighlights();
-			editor.currentPane.style.drawTextHighlights();
 		}
 
 		if (command.equals("openFile"))
@@ -82,6 +81,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 			editor.currentPane.style.getSelection().refactoring = false;
+		System.out.println(editor.currentPane.getCaretPosition());
 
 	}
 
@@ -93,7 +93,6 @@ public class Listener extends MouseAdapter implements ActionListener,
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

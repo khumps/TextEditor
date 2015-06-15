@@ -22,7 +22,7 @@ public class CodeStyler {
 		this.braceHighlights = new HashSet<BraceHighlighter>();
 		this.charHighlights = new HashSet<Character>();
 		this.highlighter = pane.getHighlighter();
-		selection = new SelectionHighlighter("", Color.YELLOW, Color.LIGHT_GRAY);
+		selection = new SelectionHighlighter("", "<b>", "</b>");
 	}
 
 	public SelectionHighlighter getSelection() {
@@ -33,44 +33,24 @@ public class CodeStyler {
 		return charHighlights;
 	}
 
-	public void drawTextHighlights() {
-		highlighter.removeAllHighlights(); // FIX
-		int length = selection.text.length();
-		for (Integer i : selection.locations) {
-			try {
-				if (i == selection.initialSelection)
-					highlighter.addHighlight(i, i + length,
-							selection.initHighlighter);
-				else
-					highlighter.addHighlight(i, i + length, selection.color);
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-		}
-		for (TextHighlighter h : textHighlights) {
-			/*
-			 * Iterator<Object> iterator = h.removedHighlights.iterator();
-			 * Removes the highlights that should no longer be there while
-			 * (iterator.hasNext()) { Object hi = iterator.next();
-			 * highlighter.removeHighlight(hi); iterator.remove(); }
-			 */
-			length = h.text.length();
-			/* Adds new highlights */
-			for (Integer i : h.locations) {
-				try {
-					highlighter.addHighlight(i, i + length, h.color);
-				} catch (BadLocationException e) {
-				}
-			}
-		}
-	}
+	/*
+	 * public void drawTextHighlights() { highlighter.removeAllHighlights(); //
+	 * FIX int length = selection.text.length(); for (Integer i :
+	 * selection.locations) { try { if (i == selection.initialSelection)
+	 * highlighter.addHighlight(i, i + length, selection.initHighlighter); else
+	 * highlighter.addHighlight(i, i + length, selection.color); } catch
+	 * (BadLocationException e) { e.printStackTrace(); } } for (TextHighlighter
+	 * h : textHighlights) { pane.setText(t.); } }
+	 */
 
 	public void updateHighlights() {
 		try {
 			String text = pane.getDocument().getText(0,
 					pane.getDocument().getLength());
 			for (TextHighlighter h : textHighlights) {
-				h.updateHighlights(text);
+				text = pane.getDocument().getText(0,
+						pane.getDocument().getLength());
+				pane.setText(h.updateHighlights(text));
 
 			}
 			if (!selection.refactoring) {
@@ -89,9 +69,10 @@ public class CodeStyler {
 		}
 	}
 
-	public void addHighlight(Color color, String... text) {
+	public void addHighlight(String preFormat, String postFormat,
+			String... text) {
 		for (String s : text)
-			textHighlights.add(new TextHighlighter(s, color));
+			textHighlights.add(new TextHighlighter(s, preFormat, postFormat));
 	}
 
 	public void addBraceHighlight(char open, char close, Color color) {

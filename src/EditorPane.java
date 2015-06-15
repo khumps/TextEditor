@@ -27,14 +27,15 @@ public class EditorPane extends JTextPane {
 	public EditorPane(Listener listener, String text, String name) {
 		this.name = name;
 		setContentType("text/html");
+		// setText("<html>" + text + "</html>");
+		setText("<b>new</b>");
 		timer = new Timer(30, listener);
-		setText(text);
-		setText("<html><b>text</b></html>");
 		setPreferredSize(new Dimension(1000, 1000));
 		setFont(new Font("Consolas", Font.PLAIN, 40));
 		// setSelectionColor(Color.BLUE);
 		timer.setActionCommand("timer");
 		addMouseListener(listener);
+		addKeyListener(listener);
 		createHighlights();
 		timer.start();
 	}
@@ -45,7 +46,7 @@ public class EditorPane extends JTextPane {
 	}
 
 	public void addTextHighlights() {
-		style.addHighlight(Color.ORANGE, "abstract", "assert", "boolean",
+		style.addHighlight("<b>", "</b>", "abstract", "assert", "boolean",
 				"break", "byte", "case", "catch", "char", "class", "continue",
 				"default", "do", "double", "else", "enum", "extends", "final",
 				"finally", "float", "for", "if", "implements", "import",

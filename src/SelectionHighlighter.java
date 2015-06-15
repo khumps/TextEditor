@@ -7,12 +7,9 @@ import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 public class SelectionHighlighter extends TextHighlighter {
 	protected boolean refactoring = false;
 	protected int initialSelection;
-	protected final DefaultHighlightPainter initHighlighter;
 
-	public SelectionHighlighter(String text, Color initColor,
-			Color otherHighlights) {
-		super(text, otherHighlights);
-		this.initHighlighter = new DefaultHighlightPainter(initColor);
+	public SelectionHighlighter(String text, String preFormat, String postFormat) {
+		super(text, preFormat, postFormat);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -48,7 +45,8 @@ public class SelectionHighlighter extends TextHighlighter {
 
 	public void refactor(String old, String refactorTo, String toSearch,
 			JEditorPane pane) {
-		pane.setText(toSearch.replaceAll(old, refactorTo));
+		if (!old.isEmpty() && !refactorTo.isEmpty())
+			pane.setText(toSearch.replaceAll(old, refactorTo));
 		System.out.println("ran");
 	}
 }
