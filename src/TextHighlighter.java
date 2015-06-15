@@ -1,19 +1,16 @@
-import java.awt.Color;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 public class TextHighlighter {
 	protected HashSet<Integer> locations = new HashSet<Integer>();
 	protected String text;
-	protected DefaultHighlightPainter color;
+	protected String preFormat; // Code put before text to format it
+	protected String postFormat; // Code put after text to format it
 
-	public TextHighlighter(String text, Color color) {
+	public TextHighlighter(String text, String preText, String postText) {
 		this.text = text;
-		this.color = new DefaultHighlightPainter(color);
+		preFormat = preText;
+		postFormat = postText;
 	}
 
 	public void findHighlights(String toSearch) {
@@ -47,9 +44,15 @@ public class TextHighlighter {
 		}
 	}
 
-	public void updateHighlights(String text) {
+	public String updateHighlights(String text) {
 		removeHighlights(text);
 		findHighlights(text);
+		String temp = text
+				.replaceAll(this.text, preFormat + this.text + postFormat)
+				.replaceAll(preFormat + preFormat, preFormat)
+				.replaceAll(postFormat + postFormat, postFormat);
+		System.out.println(temp);
+		return temp;
 	}
 
 	public boolean isValidChar(char c) {
