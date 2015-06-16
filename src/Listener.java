@@ -6,13 +6,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.undo.UndoManager;
 
 public class Listener extends MouseAdapter implements ActionListener,
-		KeyListener {
+		KeyListener, ChangeListener {
 	protected Editor editor;
 	// protected UndoHandler undoHandler = new UndoHandler();
 	protected UndoManager undoManager = new UndoManager();
@@ -95,5 +98,12 @@ public class Listener extends MouseAdapter implements ActionListener,
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JSlider slide = (JSlider) e.getSource();
+		editor.currentPane.setFont(editor.currentPane.getFont().deriveFont(
+				(float) slide.getValue()));
 	}
 }

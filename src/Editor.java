@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,6 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -17,6 +19,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 
+/**
+ * Main window that displays the text editor
+ * @author Kevin Humphreys
+ *
+ */
 public class Editor extends JFrame {
 	protected JTabbedPane tabs = new JTabbedPane();
 	private JFileChooser fileChooser;
@@ -26,6 +33,10 @@ public class Editor extends JFrame {
 	private File lastFile = null;
 	private Listener listener = new Listener(this);
 	private Timer timer = new Timer(30, listener);
+	private JSlider fontSlider;
+	private final int minFontSize = 12;
+	private final int maxFontSize = 40;
+	private final int sizeInterval = 1;
 
 	public Editor() {
 		try {
@@ -40,19 +51,19 @@ public class Editor extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
 		addMouseListener(listener);
-		tabs.add(currentPane = new EditorPane(listener, "", "New Class"),
-				"New Class");
-		initMenuBar();
-		initFileChooser();
+		init();
+		tabs.add(currentPane = new EditorPane(listener, "", "New Class",
+				fontSlider.getValue()), "New Class");
 		add(tabs);
-		//setDefaultSize(100);
+		// setDefaultSize(100);
 		pack();
 		setVisible(true);
 		timer.start();
 	}
 
 	private void addFile(String name, String text) {
-		EditorPane temp = new EditorPane(listener, text, name);
+		EditorPane temp = new EditorPane(listener, text, name,
+				fontSlider.getValue());
 		tabs.addTab(name, temp);
 		tabs.setSelectedComponent(temp);
 	}
@@ -62,6 +73,12 @@ public class Editor extends JFrame {
 		currentPane = p;
 		add(currentPane);
 		setVisible(true);
+	}
+
+	private void init() {
+		initMenuBar();
+		initFileMenu();
+		initFontSlider(minFontSize);
 	}
 
 	private void initMenuBar() {
@@ -76,6 +93,15 @@ public class Editor extends JFrame {
 		Utils.newMenuItem(Utils.button, "Save", "saveFile", listener, fileMenu);
 		Utils.newMenuItem(Utils.button, "Close Tab", "closeTab", listener,
 				fileMenu);
+	}
+
+	private void initFontSlider(int fontSize) {
+		fontSlider = new JSlider(minFontSize, maxFontSize, fontSize);
+		fontSlider.setPreferredSize(new Dimension(100,50));
+		fontSlider.addChangeListener(listener);
+		fontSlider.setLabelTable(fontSlider.createStandardLabels(sizeInterval));
+		fontSlider.setPaintLabels(true);
+		menu.add(fontSlider);
 	}
 
 	protected void initFileChooser() {

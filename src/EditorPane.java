@@ -24,14 +24,12 @@ public class EditorPane extends JTextPane {
 	private File lastFile = null;
 	protected String name;
 
-	public EditorPane(Listener listener, String text, String name) {
+	public EditorPane(Listener listener, String text, String name, int fontSize) {
 		this.name = name;
-		setContentType("text/html");
 		timer = new Timer(30, listener);
 		setText(text);
-		setText("<html><b>text</b></html>");
 		setPreferredSize(new Dimension(1000, 1000));
-		setFont(new Font("Consolas", Font.PLAIN, 40));
+		setFont(new Font("Consolas", Font.PLAIN, fontSize));
 		// setSelectionColor(Color.BLUE);
 		timer.setActionCommand("timer");
 		addMouseListener(listener);

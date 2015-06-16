@@ -25,14 +25,6 @@ public class CodeStyler {
 		selection = new SelectionHighlighter("", Color.YELLOW, Color.LIGHT_GRAY);
 	}
 
-	public SelectionHighlighter getSelection() {
-		return selection;
-	}
-
-	public HashSet<Character> getCharHighlights() {
-		return charHighlights;
-	}
-
 	public void drawTextHighlights() {
 		highlighter.removeAllHighlights(); // FIX
 		int length = selection.text.length();
@@ -119,5 +111,13 @@ public class CodeStyler {
 					e.printStackTrace();
 				}
 		}
+	}
+
+	public SelectionHighlighter getSelection() {
+		return selection;
+	}
+
+	public HashSet<Character> getCharHighlights() {
+		return charHighlights;
 	}
 }
