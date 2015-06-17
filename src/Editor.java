@@ -9,8 +9,10 @@ import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
@@ -21,10 +23,12 @@ import javax.swing.text.BadLocationException;
 
 /**
  * Main window that displays the text editor
+ * 
  * @author Kevin Humphreys
- *
+ * 
  */
 public class Editor extends JFrame {
+	private JPanel options;
 	protected JTabbedPane tabs = new JTabbedPane();
 	private JFileChooser fileChooser;
 	private JMenuBar menu = new JMenuBar();
@@ -36,17 +40,11 @@ public class Editor extends JFrame {
 	private JSlider fontSlider;
 	private final int minFontSize = 12;
 	private final int maxFontSize = 40;
-	private final int sizeInterval = 1;
+	protected int currentFontSize = minFontSize;
+	protected JLabel currentFont = new JLabel("Font Size: " + minFontSize);
 
 	public Editor() {
-		try {
-			UIManager.setLookAndFeel(UIManager
-					.getCrossPlatformLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		setTitle("Kevin's Java Editor");
 		timer.setActionCommand("timer");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
@@ -68,22 +66,15 @@ public class Editor extends JFrame {
 		tabs.setSelectedComponent(temp);
 	}
 
-	protected void switchFile(EditorPane p) {
-		remove(currentPane);
-		currentPane = p;
-		add(currentPane);
-		setVisible(true);
-	}
-
 	private void init() {
 		initMenuBar();
-		initFileMenu();
-		initFontSlider(minFontSize);
 	}
 
 	private void initMenuBar() {
 		setJMenuBar(menu);
 		initFileMenu();
+		initOptions();
+
 	}
 
 	private void initFileMenu() {
@@ -97,11 +88,21 @@ public class Editor extends JFrame {
 
 	private void initFontSlider(int fontSize) {
 		fontSlider = new JSlider(minFontSize, maxFontSize, fontSize);
-		fontSlider.setPreferredSize(new Dimension(100,50));
+		fontSlider.setPreferredSize(new Dimension(100, 25));
 		fontSlider.addChangeListener(listener);
-		fontSlider.setLabelTable(fontSlider.createStandardLabels(sizeInterval));
-		fontSlider.setPaintLabels(true);
 		menu.add(fontSlider);
+	}
+
+	/**
+	 * 
+	 */
+	private void initOptions() {
+		options = new JPanel();
+		options.setPreferredSize(new Dimension(100, 25));
+		menu.add(options);
+		initFontSlider(minFontSize);
+		options.add(currentFont);
+		options.add(fontSlider);
 	}
 
 	protected void initFileChooser() {

@@ -17,11 +17,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
+/**
+ * The place where the user inputs text which is displayed with proper
+ * formatting
+ * 
+ * @author Kevin Humphreys
+ * 
+ */
 public class EditorPane extends JTextPane {
 
 	protected CodeStyler style = new CodeStyler(this);
 	private Timer timer;
-	private File lastFile = null;
 	protected String name;
 
 	public EditorPane(Listener listener, String text, String name, int fontSize) {
@@ -39,9 +45,10 @@ public class EditorPane extends JTextPane {
 
 	public void createHighlights() {
 		addTextHighlights();
-		addBraceHighlights();
+		// addBraceHighlights();
 	}
 
+	// Adds all of the java keywords to the list of things to highlight
 	public void addTextHighlights() {
 		style.addHighlight(Color.ORANGE, "abstract", "assert", "boolean",
 				"break", "byte", "case", "catch", "char", "class", "continue",

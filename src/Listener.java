@@ -44,6 +44,12 @@ public class Listener extends MouseAdapter implements ActionListener,
 					.getComponentAt(editor.tabs.getTabCount() - 1);
 			editor.tabs.setSelectedIndex(editor.tabs.getTabCount() - 1);
 		}
+		if (command.equals("newFile")) {
+			EditorPane tempPane = new EditorPane(this, "", "New Java Class",
+					editor.currentFontSize);
+			editor.tabs.addTab("New Java Class", tempPane);
+			editor.tabs.setSelectedComponent(tempPane);
+		}
 	}
 
 	private void braceHighlights() {
@@ -74,9 +80,14 @@ public class Listener extends MouseAdapter implements ActionListener,
 			} catch (BadLocationException e2) {
 				e2.printStackTrace();
 			}
-			editor.currentPane.style.getSelection().refactor(temp,
-					JOptionPane.showInputDialog("Refactor to: "), temp2,
-					editor.currentPane);
+			if (!editor.currentPane.style.getSelection().text.isEmpty())
+				editor.currentPane.style.getSelection().refactor(temp,
+						JOptionPane.showInputDialog("Refactor to: "), temp2,
+						editor.currentPane);
+			else
+				JOptionPane.showMessageDialog(editor,
+						"Please select something to refactor",
+						"Cant refactor empty selection", 0);
 
 		}
 	}
@@ -105,5 +116,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 		JSlider slide = (JSlider) e.getSource();
 		editor.currentPane.setFont(editor.currentPane.getFont().deriveFont(
 				(float) slide.getValue()));
+		editor.currentFont.setText("Font Size: " + slide.getValue());
+		editor.currentFontSize = slide.getValue();
 	}
 }

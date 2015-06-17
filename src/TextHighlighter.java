@@ -6,6 +6,11 @@ import java.util.Iterator;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+/**
+ * 
+ * @author 16humphreysk
+ *
+ */
 public class TextHighlighter {
 	protected HashSet<Integer> locations = new HashSet<Integer>();
 	protected String text;

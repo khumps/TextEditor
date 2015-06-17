@@ -48,6 +48,8 @@ public class SelectionHighlighter extends TextHighlighter {
 
 	public void refactor(String old, String refactorTo, String toSearch,
 			JEditorPane pane) {
+		if (refactorTo.isEmpty())
+			old = "";
 		pane.setText(toSearch.replaceAll(old, refactorTo));
 		System.out.println("ran");
 	}
