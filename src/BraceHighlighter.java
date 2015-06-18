@@ -1,9 +1,15 @@
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+/**
+ * Highlights matching braces
+ * 
+ * @author Kevin Humphreys
+ *
+ */
 public class BraceHighlighter {
-	public final char open;
-	public final char close;
-	protected DefaultHighlightPainter color;
+	public final char open; // The opening brace
+	public final char close; // The closing brace
+	protected DefaultHighlightPainter color; // Color to highlight the braces
 
 	public BraceHighlighter(char open, char close, DefaultHighlightPainter color) {
 		this.open = open;
@@ -11,6 +17,16 @@ public class BraceHighlighter {
 		this.color = color;
 	}
 
+	/**
+	 * Used to find the closing brace
+	 * 
+	 * @param text
+	 *            The entire body of text to search for the closing brace
+	 * @param open
+	 *            the index of the opening brace
+	 * @return the index of the closing brace or -1 if the matching closing
+	 *         brace isn't found
+	 */
 	public int findClose(String text, int open) {
 		System.out.println("findClose()");
 		int count = 1;
@@ -27,10 +43,19 @@ public class BraceHighlighter {
 					return open;
 				}
 			}
-		System.out.println("FAIL");
 		return -1;
 	}
 
+	/**
+	 * Used to find the opening brace
+	 * 
+	 * @param text
+	 *            The entire body of text to search for the opening brace
+	 * @param close
+	 *            the index of the closing brace
+	 * @return the index of the opening brace or -1 if the matching opening
+	 *         brace isn't found
+	 */
 	public int findOpen(String text, int close) {
 		System.out.println("findOpen()");
 		int count = -1;
@@ -44,9 +69,8 @@ public class BraceHighlighter {
 				if (count == 0) {
 					System.out.println(close);
 					return close;
+				}
 			}
-		}
-		System.out.println("fail");
 		return -1;
 	}
 }

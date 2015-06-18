@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -7,18 +9,16 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.undo.UndoManager;
 
 public class Listener extends MouseAdapter implements ActionListener,
-		KeyListener, ChangeListener {
+		KeyListener, ChangeListener, FocusListener {
 	protected Editor editor;
-	// protected UndoHandler undoHandler = new UndoHandler();
-	protected UndoManager undoManager = new UndoManager();
 
 	public Listener(Editor editor) {
 		this.editor = editor;
@@ -48,6 +48,7 @@ public class Listener extends MouseAdapter implements ActionListener,
 			EditorPane tempPane = new EditorPane(this, "", "New Java Class",
 					editor.currentFontSize);
 			editor.tabs.addTab("New Java Class", tempPane);
+			editor.currentPane = tempPane;
 			editor.tabs.setSelectedComponent(tempPane);
 		}
 	}
@@ -113,10 +114,29 @@ public class Listener extends MouseAdapter implements ActionListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		JSlider slide = (JSlider) e.getSource();
-		editor.currentPane.setFont(editor.currentPane.getFont().deriveFont(
-				(float) slide.getValue()));
-		editor.currentFont.setText("Font Size: " + slide.getValue());
-		editor.currentFontSize = slide.getValue();
+		if (e.getSource() instanceof JSlider) {
+			JSlider slide = (JSlider) e.getSource();
+			editor.currentPane.setFont(editor.currentPane.getFont().deriveFont(
+					(float) slide.getValue()));
+			editor.currentFont.setText("Font Size: " + slide.getValue());
+			editor.currentFontSize = slide.getValue();
+		}
+		if (e.getSource() instanceof JTabbedPane) {
+			JTabbedPane tempPane = (JTabbedPane) e.getSource();
+			editor.currentPane = (EditorPane) tempPane.getSelectedComponent();
+			editor.currentPane.setFont(editor.currentPane.getFont().deriveFont(
+					(float) editor.currentFontSize));
+		}
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 }

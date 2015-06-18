@@ -17,7 +17,6 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 
@@ -50,24 +49,24 @@ public class Editor extends JFrame {
 		// menu.setFont(new Font(getFont().getFontName(), Font.BOLD, 40));
 		addMouseListener(listener);
 		init();
-		tabs.add(currentPane = new EditorPane(listener, "", "New Class",
-				fontSlider.getValue()), "New Class");
-		add(tabs);
 		// setDefaultSize(100);
 		pack();
 		setVisible(true);
 		timer.start();
 	}
 
-	private void addFile(String name, String text) {
+	protected void addFile(String name, String text) {
 		EditorPane temp = new EditorPane(listener, text, name,
 				fontSlider.getValue());
 		tabs.addTab(name, temp);
 		tabs.setSelectedComponent(temp);
+		currentPane = temp;
 	}
 
 	private void init() {
 		initMenuBar();
+		initFileChooser();
+		initTabs();
 	}
 
 	private void initMenuBar() {
@@ -75,6 +74,14 @@ public class Editor extends JFrame {
 		initFileMenu();
 		initOptions();
 
+	}
+	
+	private void initTabs()
+	{
+		tabs.add(currentPane = new EditorPane(listener, "", "New Class",
+				fontSlider.getValue()), "New Class");
+		tabs.addChangeListener(listener);
+		add(tabs);
 	}
 
 	private void initFileMenu() {

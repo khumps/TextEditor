@@ -8,13 +8,33 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter;
 
+/**
+ * Takes care of all highlighting that is done on the editor pane whether it be
+ * highlighting the selection, matching words, keywords, or braces
+ * 
+ * @author Kevin Humphreys
+ *
+ */
 public class CodeStyler {
-	protected HashSet<TextHighlighter> textHighlights;
-	private Highlighter highlighter;
-	protected SelectionHighlighter selection;
-	private HashSet<BraceHighlighter> braceHighlights;
+	protected HashSet<TextHighlighter> textHighlights; // Stores all of the
+														// Strings that should
+														// be highlighted on the
+														// screen
+	private Highlighter highlighter; // Reference to pane.getHighlighter() for
+										// cleaner code
+	protected SelectionHighlighter selection; // Takes care of highlighting the
+												// text that the user has
+												// selected as well as any
+												// occurrences of that text
+	private HashSet<BraceHighlighter> braceHighlights; // Stores all of the
+														// different types of
+														// braces to be
+														// highlighted and
+														// highlights them when
+														// selected
 	private HashSet<Character> charHighlights;
-	protected JTextPane pane;
+	protected JTextPane pane; // The Text Pane that all of the highlighting will
+								// show on
 
 	public CodeStyler(JTextPane pane) {
 		this.pane = pane;
@@ -25,8 +45,9 @@ public class CodeStyler {
 		selection = new SelectionHighlighter("", Color.YELLOW, Color.LIGHT_GRAY);
 	}
 
-	public void drawTextHighlights() {
-		highlighter.removeAllHighlights(); // FIX
+	public void drawTextHighlights() // Draws all text highlights
+	{
+		highlighter.removeAllHighlights();
 		int length = selection.text.length();
 		for (Integer i : selection.locations) {
 			try {
@@ -36,16 +57,9 @@ public class CodeStyler {
 				else
 					highlighter.addHighlight(i, i + length, selection.color);
 			} catch (BadLocationException e) {
-				e.printStackTrace();
 			}
 		}
 		for (TextHighlighter h : textHighlights) {
-			/*
-			 * Iterator<Object> iterator = h.removedHighlights.iterator();
-			 * Removes the highlights that should no longer be there while
-			 * (iterator.hasNext()) { Object hi = iterator.next();
-			 * highlighter.removeHighlight(hi); iterator.remove(); }
-			 */
 			length = h.text.length();
 			/* Adds new highlights */
 			for (Integer i : h.locations) {
